@@ -1,0 +1,84 @@
+#include<bits/stdc++.h>
+using namespace std;
+class disjointset
+{
+    vector<int>size, parent;
+public:
+    disjointset(int n)
+    {
+        size.resize(n + 1, 1);
+        parent.resize(n + 1);
+        for(int i = 0; i <= n; i++)
+        {
+            parent[i] = i;
+        }
+    }
+    int findparent(int child)
+    {
+        if(child == parent[child])
+            return child;
+        return parent[child] = findparent(parent[child]);
+    }
+    void unionbysize(int u, int v)
+    {
+        int parent_u = findparent(u), parent_v = findparent(v);
+        if(parent_u == parent_v) return;
+        if(size[parent_u] < size[parent_v])
+        {
+            parent[parent_u] = parent_v;
+            size[parent_v] += size[parent_u];
+        }
+        else if(size[parent_u] > size[parent_v])
+        {
+            parent[parent_v] = parent_u;
+            size[parent_u] += size[parent_v];
+        }
+        else
+        {
+            parent[parent_u] = parent_v;
+            size[parent_v] += size[parent_u];
+        }
+    }
+};
+int main()
+{
+    int node = 7;
+    disjointset graph(node);
+    graph.unionbysize(1, 2);
+    graph.unionbysize(2, 3);
+    graph.unionbysize(4, 5);
+    graph.unionbysize(6, 7);
+    graph.unionbysize(5, 6);
+    if(graph.findparent(3) == graph.findparent(7))
+        cout<< "Same component" << endl;
+    else
+        cout<< "Different component" << endl;
+    graph.unionbysize(3, 7);
+    if(graph.findparent(3) == graph.findparent(7))
+        cout<< "Same component" << endl;
+    else
+        cout<< "Different component" << endl;
+}
+/*
+int main()
+{
+    int node, edge, query;
+    cin>>node>>edge;
+    disjointset graph(node);
+    for(int i = 0; i < edge; i++)
+    {
+        int u, v;
+        cin>>u>>v;
+        graph.unionbysize(u, v);
+    }
+    for(int i = 0; i < query; i++)
+    {
+        int u, v;
+        cin>>u>>v;
+        if(graph.findparent(u) == graph.findparent(v))
+            cout<< "Same component" << endl;
+        else
+            cout<< "Different component" << endl;
+    }
+}
+*/
