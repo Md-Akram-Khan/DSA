@@ -1,44 +1,36 @@
 #include<bits/stdc++.h>
 using namespace std;
-class disjointset
+struct dsu
 {
-    vector<int>size, parent;
-public:
-    disjointset(int n)
+    vector<int>sz, parent;
+    dsu(int n)
     {
-        size.resize(n + 1, 1);
+        sz.resize(n + 1, 1);
         parent.resize(n + 1);
-        for(int i = 0; i <= n; i++)
-        {
-            parent[i] = i;
-        }
+        for(int i = 0; i <= n; i++) parent[i] = i;
     }
     int findparent(int child)
     {
-        if(child == parent[child])
-            return child;
-        return parent[child] = findparent(parent[child]);
+        if(child != parent[child]) parent[child] = findparent(parent[child]);
+        return parent[child];
+    }
+    bool same_parent(int u, int v)
+    {
+        int parent_u = findparent(u), parent_v = findparent(v);
+        return parent_u == parent_v;
     }
     void unionbysize(int u, int v)
     {
         int parent_u = findparent(u), parent_v = findparent(v);
         if(parent_u == parent_v) return;
-        if(size[parent_u] < size[parent_v])
-        {
-            parent[parent_u] = parent_v;
-            size[parent_v] += size[parent_u];
-        }
-        else if(size[parent_u] > size[parent_v])
-        {
-            parent[parent_v] = parent_u;
-            size[parent_u] += size[parent_v];
-        }
-        else
-        {
-            parent[parent_u] = parent_v;
-            size[parent_v] += size[parent_u];
-        }
+        if(sz[parent_u] < sz[parent_v]) swap(sz[parent_u], sz[parent_v]);
+        parent[parent_v] = parent_u;
+        sz[parent_u] += sz[parent_v];
     }
+    int ssize(int u)
+        {
+            return sz[findparent(u)];
+        }
 };
 int main()
 {
