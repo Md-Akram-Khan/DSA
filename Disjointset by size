@@ -35,7 +35,7 @@ struct dsu
 int main()
 {
     int node = 7;
-    disjointset graph(node);
+    dsu graph(node);
     graph.unionbysize(1, 2);
     graph.unionbysize(2, 3);
     graph.unionbysize(4, 5);
@@ -56,7 +56,7 @@ int main()
 {
     int node, edge, query;
     cin>>node>>edge;
-    disjointset graph(node);
+    dsu graph(node);
     for(int i = 0; i < edge; i++)
     {
         int u, v;
