@@ -3,8 +3,10 @@ using namespace std;
 struct dsu
 {
     vector<int>sz, parent;
+    //vector<int>rank;
     dsu(int n)
     {
+        //rank.resize(n + 1, 0);
         sz.resize(n + 1, 1);
         parent.resize(n + 1);
         for(int i = 0; i <= n; i++) parent[i] = i;
@@ -27,14 +29,14 @@ struct dsu
         parent[parent_v] = parent_u;
         sz[parent_u] += sz[parent_v];
     }
-    void unionbyrank(int u, int v)
-    {
-        int parent_u = findparent(u), parent_v = findparent(v);
-        if(parent_u == parent_v) return;
-        if(rank[parent_u] == rank[parent_v]) rank[parent_u]++;
-        if(rank[parent_u] < rank[parent_v]) swap(rank[parent_u], rank[parent_v]); 
-        parent[parent_v] = parent_u;
-    }
+    // void unionbyrank(int u, int v)
+    // {
+    //     int parent_u = findparent(u), parent_v = findparent(v);
+    //     if(parent_u == parent_v) return;
+    //     if(rank[parent_u] == rank[parent_v]) rank[parent_u]++;
+    //     if(rank[parent_u] < rank[parent_v]) swap(rank[parent_u], rank[parent_v]); 
+    //     parent[parent_v] = parent_u;
+    // }
     int ssize(int u)
     {
         return sz[findparent(u)];
