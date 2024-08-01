@@ -38,7 +38,9 @@ struct dsu
     //     parent[parent_v] = parent_u;
     // }
     int ssize(int u)
+    {
         return sz[findparent(u)];
+    }
 };
 int main()
 {
