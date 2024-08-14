@@ -1,0 +1,63 @@
+#include<bits/stdc++.h>
+#define ll long long int
+using namespace std;
+void range_update(vector<ll> &update, vector<ll> &block, vector<ll> &a, ll weight, int l, int r, ll block_length)
+{
+    int i = l;
+    while(i <= r)
+    {
+        if(i % block_length == 0 and i + block_length - 1 <= r)
+        {
+            update[i / block_length] += weight; 
+            block[i / block_length] += weight * block_length;
+            i += block_length;
+        }
+        else
+        {
+            a[i] += weight;
+            block[i / block_length] += weight;
+            i++;
+        }
+    }
+}
+ll find_range_sum(int l, int r, ll block_length, vector<ll> block, vector<ll> a, vector<ll> update)
+{
+    ll sum = 0;
+    int i = l;
+    while(i <= r)
+    {
+        if(i % block_length == 0 and i + block_length - 1 <= r)
+        {
+            sum += block[i / block_length];
+            i += block_length;
+        }
+        else
+        {
+            sum += a[i] + update[i / block_length];
+            i++;
+        }
+    }
+    return sum;
+}
+int main()
+{
+    int n, q;
+    cin>>n>>q;
+    vector<ll> a(n);
+    for(int i = 0; i < n; i++)
+        cin>>a[i];
+    ll block_length = (ll) sqrt(n + 0.0) + 1; 
+    vector<ll> block(block_length, 0), update(block_length, 0);
+    for(int i = 0; i < n; i++)
+        block[i / block_length] += a[i];
+    for(int i = 0; i < q; i++)
+    {
+        int l, r;
+        ll weight;
+        cin>>l>>r>>weight;
+        l--, r--;
+        range_update(update, block, a, weight, l, r, block_length);
+        ll sum = find_range_sum(l, r, block_length, block, a, update);
+        cout<<sum<<endl;
+    }
+}
