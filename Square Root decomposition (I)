@@ -32,7 +32,7 @@ int main()
     for(int i = 0; i < n; i++)
         cin>>a[i];
     int block_length = (int) sqrt(n + 0.0) + 1; 
-    vector<int> block(block_length);
+    vector<int> block(block_length, 0);
     for(int i = 0; i < n; i++)
         block[i / block_length] += a[i];
     for(int i = 0; i < q; i++)
