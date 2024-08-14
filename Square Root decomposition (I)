@@ -1,13 +1,14 @@
 #include<bits/stdc++.h>
+#define ll long long int
 using namespace std;
-void single_update(vector<int> &block, vector<int> &a, int weight, int index, int block_length)
+void single_update(vector<ll> &block, vector<ll> &a, ll weight, int index, ll block_length)
 {
     a[index] += weight;
     block[index / block_length] += weight;
 }
-int find_range_sum(int l, int r, int block_length, vector<int> block, vector<int> a)
+ll find_range_sum(int l, int r, ll block_length, vector<ll> block, vector<ll> a)
 {
-    int sum = 0;
+    ll sum = 0;
     int i = l;
     while(i <= r)
     {
@@ -28,20 +29,21 @@ int main()
 {
     int n, q;
     cin>>n>>q;
-    vector<int> a(n);
+    vector<ll> a(n);
     for(int i = 0; i < n; i++)
         cin>>a[i];
-    int block_length = (int) sqrt(n + 0.0) + 1; 
-    vector<int> block(block_length, 0);
+    ll block_length = (int) sqrt(n + 0.0) + 1; 
+    vector<ll> block(block_length, 0);
     for(int i = 0; i < n; i++)
         block[i / block_length] += a[i];
     for(int i = 0; i < q; i++)
     {
-        int l, r, index, weight;
+        int l, r, index;
+        ll weight;
         cin>>l>>r>>index>>weight;
         l--, r--;
         single_update(block, a, weight, index, block_length);
-        int sum = find_range_sum(l, r, block_length, block, a);
+        ll sum = find_range_sum(l, r, block_length, block, a);
         cout<<sum<<endl;
     }
 }
