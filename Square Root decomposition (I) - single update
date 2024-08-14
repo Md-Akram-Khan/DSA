@@ -1,3 +1,4 @@
+// dont use additional function.otherwise u may get TLE
 #include<bits/stdc++.h>
 #define ll long long int
 using namespace std;
