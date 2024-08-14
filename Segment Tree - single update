@@ -1,0 +1,64 @@
+vector<ll> a, mn;
+void build(int at, int l, int r)
+{
+    if(l == r)
+    {
+        mn[at] = a[l]; 
+        return;
+    }
+    int mid = (l + r) / 2;
+    build(at * 2, l, mid);
+    build(at * 2 + 1, mid + 1, r);
+    mn[at] = min(mn[at * 2], mn[at * 2 + 1]); 
+}
+void update(int at, int l, int r, int pos, ll u)
+{
+    if(l == r)
+    {
+        mn[at] = u;
+        return;
+    }
+    int mid = (l + r) / 2;
+    if(pos <= mid) 
+        update(at * 2, l, mid, pos, u);
+    else
+        update(at * 2 + 1, mid + 1, r, pos, u);
+    mn[at] = min(mn[at * 2], mn[at * 2 + 1]);
+}
+ll query(int at, int l, int r, int lll, int rr)
+{
+    if(r < lll or rr < l) 
+        return INT_MAX;
+    if(lll <= l and r <= rr)
+        return mn[at];
+    int mid = (l + r) / 2;
+    ll x = query(at * 2, l, mid, lll, rr);
+    ll y = query(at * 2 + 1, mid + 1, r, lll, rr);
+    return min(x, y);
+}
+void solve()
+{
+    int n, q;
+    cin>>n>>q;
+    a.resize(n+1);
+    mn.resize(4 * n);
+    for(int i = 1; i <= n; i++)
+        cin>>a[i];
+    build(1, 1, n);
+    while(q--)
+    {
+        int p;
+        cin>>p;
+        if(p == 1)
+        {
+            int k;
+            ll u;
+            cin>>k>>u;
+            update(1, 1, n, k, u);
+            continue;
+        }
+        int lll, rr;
+        cin>>lll>>rr;
+        cout<<query(1, 1, n, lll, rr)<<endl;
+    }
+}
