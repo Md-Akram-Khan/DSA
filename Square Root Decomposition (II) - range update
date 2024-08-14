@@ -1,3 +1,4 @@
+// dont use range_update and find_range_same as a function.otherwise u may get TLE
 #include<bits/stdc++.h>
 #define ll long long int
 using namespace std;
