@@ -21,33 +21,33 @@ public:
         single_update(l, val);
         single_update(r + 1, -val);
     }
-    ll read(int idx) {
-        ll xorr = 0;
+    ll prefix_sum(int idx) {
+        ll ret = 0;
         while (idx > 0) {
-            xorr ^= tree[idx];
+            ret += tree[idx];
             idx -= (idx & -idx);
         }
-        return xorr;
+        return ret;
+    }
+    ll range_sum(int l, int r) {
+        if(l == 1)
+            return prefix_sum(r);
+        return prefix_sum(r) - prefix_sum(l - 1);
     }
 };
 
 int main() {
-    int n, q;
-    cin >> n >> q;
+    int n;
+    cin >> n;
     FenwickTree bit(n);
-
     for (int i = 1; i <= n; ++i) {
         int val;
         cin >> val;
-        bit.update(i, val);
+        bit.update(i, val); 
     }
-    while(q--)
-    {
-        int l, r;
-        cin>>l>>r;
-        ll xorr = bit.read(r);
-        if(l != 1)
-            xorr ^= bit.read(l - 1);
-        cout<<xorr<<endl;
+    for(int i = 1; i <= n; i++)
+        cout<<bit.single_sum(i)<<' ';
+    cout<<endl;
+    cout<<bit.range_sum(2, 4)<<endl;
     }
 }
