@@ -1,0 +1,48 @@
+#include<bits/stdc++.h>
+#define ll long long int
+using namespace std;
+class FenwickTree {
+private:
+    vector<ll> tree;
+    int MaxVal;
+public:
+    FenwickTree(int size) {
+        MaxVal = size;
+        tree.resize(size + 1, 0);
+    }
+    void update(int idx, ll val) {
+        while (idx <= MaxVal) {
+            tree[idx] ^= val;
+            idx += (idx & -idx);
+        }
+    }
+    ll read(int idx) {
+        ll xorr = 0;
+        while (idx > 0) {
+            xorr ^= tree[idx];
+            idx -= (idx & -idx);
+        }
+        return xorr;
+    }
+};
+
+int main() {
+    int n, q;
+    cin >> n >> q;
+    FenwickTree bit(n);
+
+    for (int i = 1; i <= n; ++i) {
+        int val;
+        cin >> val;
+        bit.update(i, val);
+    }
+    while(q--)
+    {
+        int l, r;
+        cin>>l>>r;
+        ll xorr = bit.read(r);
+        if(l != 1)
+            xorr ^= bit.read(l - 1);
+        cout<<xorr<<endl;
+    }
+}
