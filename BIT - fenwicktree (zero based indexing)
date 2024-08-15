@@ -3,14 +3,14 @@
 using namespace std;
 
 struct FenwickTree {
-    vector<int> bit;
+    vector<ll> bit;
     int MaxVal;
     FenwickTree(int n) {
         MaxVal = n;
         bit.assign(n, 0);
     }
-    int prefix_sum(int r) {
-        int ret = 0;
+    ll prefix_sum(int r) {
+        ll ret = 0;
         while ( r >= 0 )
         {
             ret += bit[r];
@@ -18,14 +18,23 @@ struct FenwickTree {
         }
         return ret;
     }
-    int range_sum(int l, int r) {
+    ll range_sum(int l, int r) {
+        l--, r--;
+        if(l == 0) 
+            return prefix_sum(r);
         return prefix_sum(r) - prefix_sum(l - 1);
     }
-    void update(int idx, ll val) {
+    void single_update(int idx, ll val) {
         while (idx < MaxVal) {
             bit[idx] += val;
             idx |= (idx + 1);
         }
+    }
+    void range_update(int l, int r, ll val)
+    {
+        l--, r--;
+        single_update(l, val);
+        single_update(r + 1, -val);
     }
 };
 int main() {
@@ -33,12 +42,12 @@ int main() {
     cin >> n >> q;
     FenwickTree bit(n);
     for (int i = 0; i < n; ++i) {
-        int val;
+        ll val;
         cin >> val;
-        bit.update(i, val); 
+        bit.single_update(i, val); 
     }
     for(int i = 0; i < n; i++)
-        cout<<bit.single_sum(i)<<' ';
+        cout<<bit.prefix_sum(i)<<' ';
     cout<<endl;
     cout<<bit.range_sum(2, 4)<<endl;
 }
