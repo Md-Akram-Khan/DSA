@@ -20,8 +20,6 @@ struct FenwickTree {
     }
     ll range_sum(int l, int r) {
         l--, r--;
-        if(l == 0) 
-            return prefix_sum(r);
         return prefix_sum(r) - prefix_sum(l - 1);
     }
     void single_update(int idx, ll val) {
