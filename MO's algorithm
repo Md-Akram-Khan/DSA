@@ -1,0 +1,93 @@
+/* 
+Block size of precisely sqrt{N}  doesn't always offer the best runtime. For example, if sqrt{N}=750$ then it may happen that block size of  
+700 or 800  may run better. More importantly, don't compute the block size at runtime - make it const. Division by constants is well optimized by compilers.
+*/
+const ll block_size = 600;
+const int sz = 2e5;
+ 
+struct Query {
+    int l, r, index, ans;
+
+    bool operator<(const Query& other) const {
+        if (l / block_size != other.l / block_size) {
+            return l < other.l;
+        }
+        return ((l / block_size) & 1) ? (r < other.r) : (r > other.r);
+    }
+};
+struct TVal {
+    int value, index;
+};
+ 
+int n, q, cnt = 1;
+TVal arr [sz];
+Query qr [sz];
+int freq [sz];
+ 
+void move(int& l, int& r, int& a, int& b) {
+    while (a < l) {
+        l--;
+        if (++freq[arr[l].value] == 1)
+            cnt++;
+    }
+    while (r < b) {
+        r++;
+        if (++freq[arr[r].value] == 1)
+            cnt++;
+    }
+    while (l < a) {
+        if (--freq[arr[l].value] == 0)
+            cnt--;
+        l++;
+    }
+    while (b < r) {
+        if (--freq[arr[r].value] == 0)
+            cnt--;
+        r--;
+    }
+}
+ 
+void compress() {
+    sort(arr, arr+n, [](const TVal& a, const TVal& b) {
+        return a.value < b.value;
+    });
+    int last = arr[0].value, aux;
+    arr[0].value = 0;
+    for(int i = 1; i < n; i++) {
+        aux = arr[i].value;
+        arr[i].value = arr[i-1].value + (last != arr[i].value);
+        last = aux;
+    }
+    sort(arr, arr+n, [](const TVal& a, const TVal& b) {
+        return a.index < b.index;
+    });
+}
+
+void solve()
+{
+    cin >> n >> q;
+    for(int i = 0; i < n; i++) {
+        cin >> arr[i].value;
+        arr[i].index = i;
+    }
+    compress();
+    for(int i = 0; i < q; i++) {
+        cin >> qr[i].l >> qr[i].r;
+        qr[i].l--; qr[i].r--;
+        qr[i].index = i;
+    }
+    sort(qr, qr + q);
+    freq[arr[0].value] = 1;
+    int l = 0, r = 0;
+    for(int i = 0; i < q; i++) {
+        move(l, r, qr[i].l, qr[i].r);
+        qr[i].ans = cnt;
+    }
+    sort(qr, qr+q, [](const Query& a, const Query& b) {
+        return a.index < b.index;
+    });
+ 
+    for(int i = 0; i < q; i++)
+        cout << qr[i].ans << '\n';
+
+}
