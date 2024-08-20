@@ -1,0 +1,81 @@
+vector<ll> a, value, prefixsum, lazy;
+ 
+void build(int at, int l, int r) {
+    if(l == r) {
+        value[at] = prefixsum[l]; 
+        return;
+    }
+    int mid = (l + r) / 2;
+    build(at * 2, l, mid);
+    build(at * 2 + 1, mid + 1, r);
+    value[at] = max(value[at * 2], value[at * 2 + 1]);
+}
+ 
+void propagate(int at, int l, int r) {
+    if(l != r) {
+        lazy[at * 2] += lazy[at];
+        lazy[at * 2 + 1] += lazy[at];
+    }
+    value[at] += lazy[at];
+    lazy[at] = 0;
+}
+ 
+void update(int at, int l, int r, int pos_l, int pos_r, ll val) {
+    propagate(at, l, r);
+    if(r < pos_l or pos_r < l) return;
+    if(pos_l <= l and r <= pos_r) {
+        lazy[at] += val;
+        propagate(at, l, r);
+        return;
+    }
+    int mid = (l + r) / 2;
+    update(at * 2, l, mid, pos_l, pos_r, val);
+    update(at * 2 + 1, mid + 1, r, pos_l, pos_r, val);
+    value[at] = max(value[at * 2], value[at * 2 + 1]);
+}
+ 
+ll query(int at, int l, int r, int lll, int rr) {
+    propagate(at, l, r);
+    if(r < lll or rr < l) return -1e18;
+    if(lll <= l and r <= rr) {
+        return value[at];
+    }
+    int mid = (l + r) / 2;
+    ll left = query(at * 2, l, mid, lll, rr);
+    ll right = query(at * 2 + 1, mid + 1, r, lll, rr);
+    return max(left, right);
+}
+ 
+void solve() {
+    int n, q;
+    cin >> n >> q;
+    a.resize(n+1);
+    prefixsum.resize(n + 1);
+    value.resize(4 * n, 0);
+    lazy.resize(4 * n, 0);
+    for(int i = 1; i <= n; i++) cin >> a[i];
+    prefixsum[0] = 0;
+    for(int i = 1; i <= n; i++) prefixsum[i] = prefixsum[i - 1] + a[i];
+    build(1, 1, n);
+    while(q--) {
+        int p;
+        cin >> p;
+        if(p == 1) {
+            int k;
+            ll x;
+            cin >> k >> x;
+            ll diff = x - a[k];
+            update(1, 1, n, k, n, diff);
+            a[k] = x;
+        } else {
+            int lll, rr;
+            cin >> lll >> rr;
+            ll ans = query(1, 1, n, lll, rr);
+            if(lll != 1)
+                ans -= query(1, 1, n, lll - 1, lll - 1);
+            if(ans < 0)
+                ans = 0;
+            cout<<ans<<endl;
+        }
+    }
+}
