@@ -1,0 +1,105 @@
+const ll block_size = 600;
+ 
+inline ll gilbertOrder(int x, int y, int pow, int rotate) {
+    if (pow == 0) return 0;
+    int hpow = 1 << (pow-1);
+    int seg = (x < hpow) ? ((y < hpow) ? 0 : 3) : ((y < hpow) ? 1 : 2);
+    seg = (seg + rotate) & 3;
+    const int rotateDelta[4] = {3, 0, 0, 1};
+    int nx = x & (x ^ hpow), ny = y & (y ^ hpow);
+    int nrot = (rotate + rotateDelta[seg]) & 3;
+    ll subSquareSize = (ll)(1) << (2*pow - 2);
+    ll ans = seg * subSquareSize;
+    ll add = gilbertOrder(nx, ny, pow-1, nrot);
+    ans += (seg == 1 || seg == 2) ? add : (subSquareSize - add - 1);
+    return ans;
+}
+ 
+struct Query {
+    int l, r, index, ans;
+    ll ord;
+ 
+    inline void calcOrder() {
+        ord = gilbertOrder(l, r, 18, 0);  // 2^k >= n and k will be minimum , here k = 18
+    }
+};
+ 
+bool cmp(Query &x, Query &y)
+{
+    return x.ord < y.ord;
+}
+struct TVal {
+    int value, index;
+};
+ 
+int n, q, cnt = 0;
+TVal arr[sz];
+Query qr[sz];
+int freq[sz];
+ 
+void move(int& l, int& r, int& a, int& b) {
+    while (l > a) {
+        l--;
+        if (++freq[arr[l].value] == 1)
+            cnt++;
+    }
+    while (r < b) {
+        r++;
+        if (++freq[arr[r].value] == 1)
+            cnt++;
+    }
+    while (l < a) {
+        if (--freq[arr[l].value] == 0)
+            cnt--;
+        l++;
+    }
+    while (r > b) {
+        if (--freq[arr[r].value] == 0)
+            cnt--;
+        r--;
+    }
+}
+ 
+void compress() {
+    sort(arr, arr+n, [](const TVal& a, const TVal& b) {
+        return a.value < b.value;
+    });
+    int last = arr[0].value, aux;
+    arr[0].value = 0;
+    for(int i = 1; i < n; i++) {
+        aux = arr[i].value;
+        arr[i].value = arr[i-1].value + (last != arr[i].value);
+        last = aux;
+    }
+    sort(arr, arr+n, [](const TVal& a, const TVal& b) {
+        return a.index < b.index;
+    });
+}
+ 
+void solve()
+{
+    cin >> n >> q;
+    for(int i = 0; i < n; i++) {
+        cin >> arr[i].value;
+        arr[i].index = i;
+    }
+    compress();
+    for(int i = 0; i < q; i++) {
+        cin >> qr[i].l >> qr[i].r;
+        qr[i].l--; qr[i].r--;
+        qr[i].index = i;
+        qr[i].calcOrder();
+    }
+    sort(qr, qr + q, cmp);
+    int l = 0, r = -1;
+    for(int i = 0; i < q; i++) {
+        move(l, r, qr[i].l, qr[i].r);
+        qr[i].ans = cnt;
+    }
+    sort(qr, qr + q, [](const Query& a, const Query& b) {
+        return a.index < b.index;
+    });
+ 
+    for(int i = 0; i < q; i++)
+        cout << qr[i].ans << nl;
+}
