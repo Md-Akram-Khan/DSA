@@ -1,0 +1,133 @@
+#include<iostream>
+using namespace std;
+
+struct singly_linked_list{
+    struct node{
+        int val;
+        node *next;
+    };
+
+    node *head, *tail;
+    singly_linked_list()
+    {
+        head = nullptr;
+        tail = nullptr;
+    }
+
+    void insert_last(int x)
+    {
+        node *new_node = new node();
+        new_node->val = x;
+        new_node->next = nullptr;
+        if(tail == nullptr)
+        {
+            head = new_node;
+            tail = new_node;
+        }
+        else
+        {
+            tail->next = new_node;
+            tail = new_node;
+        }
+    }
+    void insert_first(int x)
+    {
+        node *new_node = new node();
+        new_node->val = x;
+        new_node->next = nullptr;
+        if(head == nullptr)
+        {
+            head = new_node;
+            tail = new_node;
+        }
+        else
+        {
+           new_node->next = head;
+           head = new_node;
+        }
+    }
+    void delete_first()
+    {
+        if(head == nullptr)
+            return;
+        if(head == tail)
+        {
+            delete head;
+            head = nullptr;
+            tail = nullptr;
+            return;
+        }
+        node *temp = head->next;
+        delete head;
+        head = temp;
+    }
+    void delete_last()
+    {
+        if(head == nullptr)
+            return;
+        if(head == tail)
+        {
+            delete head;
+            head = nullptr;
+            tail = nullptr;
+            return;
+        }
+        node *temp = head;
+        while(temp->next->next != nullptr)
+            temp = temp->next;
+        delete temp->next;
+        temp->next = nullptr; 
+        tail = temp;
+    } 
+    void delete_first_occurrance(int x)
+    {
+        if(head == nullptr)
+            return;
+        
+        if(head->val == x)
+        {
+            node *temp = head->next;
+            delete head;
+            head = temp;
+            if(head == nullptr) 
+                tail = nullptr;
+            return;
+        }
+        node *temp = head;
+        while(temp->next)
+        {
+            if(temp->next->val == x)
+            {
+                node *next_node = temp->next->next;
+                delete temp->next;
+                temp->next = next_node;
+                if(next_node == nullptr) 
+                    tail = temp;
+                return;
+            }
+            temp = temp->next;
+        }
+        //cout<<"Value "<<x<<" not found in the list."<<endl;
+    }
+    void print()
+    {
+        node *current = head;
+        while(current)
+        {
+            cout<<current->val<<endl;
+            current = current->next;
+        }
+    }
+};
+int main()
+{
+    int n,v;
+    cin>>n;
+    singly_linked_list list;
+    while(n--)
+    {
+        cin>>v;
+        list.insert_last(v);
+    }
+    list.print();
+}
