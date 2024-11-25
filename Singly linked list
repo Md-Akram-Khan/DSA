@@ -79,6 +79,29 @@ struct singly_linked_list{
         temp->next = nullptr; 
         tail = temp;
     } 
+    // void delete_last(){
+    //     if(tail == nullptr)
+    //         return;
+    //     if(tail == head)
+    //     {
+    //         delete tail;
+    //         tail = head = nullptr;
+    //         return;
+    //     }
+    //     node *temp = head;
+    //     while(1)
+    //     {
+    //         if(temp->next->next == nullptr)
+    //         {
+    //             delete temp->next;
+    //             temp->next = nullptr;
+    //             tail = temp;
+    //             break;
+    //         }
+    //         else
+    //             temp = temp->next;
+    //     }
+    // }
     void delete_first_occurrance(int x)
     {
         if(head == nullptr)
