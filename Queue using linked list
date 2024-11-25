@@ -1,0 +1,101 @@
+#include <iostream>
+using namespace std;
+
+struct singly_linked_list {
+    struct node {
+        int val;
+        node *next;
+    };
+
+    node *head, *tail;
+    singly_linked_list() {
+        head = nullptr;
+        tail = nullptr;
+    }
+
+    void insert_last(int x) {
+        node *new_node = new node();
+        new_node->val = x;
+        new_node->next = nullptr;
+        if (tail == nullptr) {
+            head = new_node;
+            tail = new_node;
+        } else {
+            tail->next = new_node;
+            tail = new_node;
+        }
+    }
+
+    void delete_first() {
+        if (head == nullptr)
+            return;
+        if (head == tail) {
+            delete head;
+            head = nullptr;
+            tail = nullptr;
+            return;
+        }
+        node *temp = head->next;
+        delete head;
+        head = temp;
+    }
+
+    bool is_empty() {
+        return head == nullptr;
+    }
+
+    int get_first() {
+        // if (head == nullptr) {
+        //     throw runtime_error("Queue underflow: Attempt to access an empty queue.");
+        // }
+        return head->val;
+    }
+};
+
+class queue {
+    singly_linked_list list;
+
+public:
+    void enqueue(int x) {
+        list.insert_last(x);
+    }
+
+    void dequeue() {
+        // if (list.is_empty()) {
+        //     cout << "Queue underflow: Attempt to dequeue from an empty queue." << endl;
+        //     return;
+        // }
+        list.delete_first();
+    }
+
+    int front() {
+        return list.get_first();
+    }
+
+    bool empty() {
+        return list.is_empty();
+    }
+
+};
+
+int main() {
+    queue q;
+
+    q.enqueue(10);
+    q.enqueue(20);
+    q.enqueue(30);
+
+    cout << "Front element: " << q.front() << endl; // Output: 10
+
+    q.dequeue();
+
+    cout << "After dequeuing, front element: " << q.front() << endl; // Output: 20
+
+    while(!q.empty())
+    {
+        cout<<q.front()<<' ';
+        q.dequeue();
+    }
+
+    return 0;
+}
