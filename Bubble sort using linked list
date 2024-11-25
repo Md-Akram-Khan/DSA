@@ -1,0 +1,77 @@
+#include <iostream>
+using namespace std;
+
+struct singly_linked_list {
+    struct node {
+        int val;
+        node *next;
+    };
+
+    node *head, *tail;
+    singly_linked_list() {
+        head = nullptr;
+        tail = nullptr;
+    }
+
+    void insert_last(int x) {
+        node *new_node = new node();
+        new_node->val = x;
+        new_node->next = nullptr;
+        if (tail == nullptr) {
+            head = new_node;
+            tail = new_node;
+        } else {
+            tail->next = new_node;
+            tail = new_node;
+        }
+    }
+
+    void bubble_sort() {
+        if (head == nullptr || head == tail)
+            return; 
+    
+        bool swapped = true;
+        while(swapped){
+            swapped = false;
+            node *current = head;
+            while (current->next) {
+                if (current->val > current->next->val) {
+                    swap(current->val, current->next->val);
+                    swapped = true;
+                }
+                current = current->next;
+            }
+        }
+    }
+
+    void print() {
+        node *current = head;
+        while (current) {
+            cout << current->val << " ";
+            current = current->next;
+        }
+        cout << endl;
+    }
+};
+
+int main() {
+    singly_linked_list list;
+
+    list.insert_last(64);
+    list.insert_last(34);
+    list.insert_last(25);
+    list.insert_last(12);
+    list.insert_last(22);
+    list.insert_last(11);
+    list.insert_last(90);
+
+    cout << "Original List: ";
+    list.print();
+
+    list.bubble_sort();
+
+    cout << "Sorted List: ";
+    list.print();
+
+    return 0;
+}
