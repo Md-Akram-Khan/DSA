@@ -1,0 +1,98 @@
+#include <iostream>
+using namespace std;
+
+struct singly_linked_list {
+    struct node {
+        int val;
+        node *next;
+    };
+
+    node *head, *tail;
+    singly_linked_list() {
+        head = nullptr;
+        tail = nullptr;
+    }
+
+    void insert_first(int x) {
+        node *new_node = new node();
+        new_node->val = x;
+        new_node->next = nullptr;
+        if (head == nullptr) {
+            head = new_node;
+            tail = new_node;
+        } else {
+            new_node->next = head;
+            head = new_node;
+        }
+    }
+
+    void delete_first() {
+        if (head == nullptr)
+            return;
+        if (head == tail) {
+            delete head;
+            head = nullptr;
+            tail = nullptr;
+            return;
+        }
+        node *temp = head->next;
+        delete head;
+        head = temp;
+    }
+
+    bool is_empty() {
+        return head == nullptr;
+    }
+
+    int get_first() {
+        // if (head == nullptr) {
+            
+        // }
+        return head->val;
+    }
+};
+
+class stack {
+    singly_linked_list list;
+
+public:
+    void push(int x) {
+        list.insert_first(x);
+    }
+
+    void pop() {
+        if (list.is_empty()) {
+            return;
+        }
+        list.delete_first();
+    }
+
+    int top() {
+         return list.get_first();  
+    }
+
+    bool empty() {
+        return list.is_empty();
+    }
+};
+
+int main() {
+    stack s;
+
+    s.push(10);
+    s.push(20);
+    s.push(30);
+
+    cout << "Top element: " << s.top() << endl; // Output: 30
+
+    s.pop();
+
+    cout << "After popping, top element: " << s.top() << endl; // Output: 20
+
+    while(!s.empty())
+    {
+        cout<<s.top()<<' ';
+        s.pop();
+    } 
+    return 0;
+}
