@@ -1,3 +1,82 @@
+/*
+#include <iostream>
+using namespace std;
+
+struct stack {
+    struct node {
+        int val;
+        node *next;
+    };
+
+    node *head, *tail;
+    stack() {
+        head = nullptr;
+        tail = nullptr;
+    }
+
+    void push(int x) {
+        node *new_node = new node();
+        new_node->val = x;
+        new_node->next = nullptr;
+        if (head == nullptr) {
+            head = new_node;
+            tail = new_node;
+        } else {
+            new_node->next = head;
+            head = new_node;
+        }
+    }
+
+    void pop() {
+        if (head == nullptr)
+            return;
+        if (head == tail) {
+            delete head;
+            head = nullptr;
+            tail = nullptr;
+            return;
+        }
+        node *temp = head->next;
+        delete head;
+        head = temp;
+    }
+
+    bool empty() {
+        return head == nullptr;
+    }
+
+    int top() {
+        // if (head == nullptr) {
+            
+        // }
+        return head->val;
+    }
+};
+
+int main() {
+    stack s;
+
+    s.push(10);
+    s.push(20);
+    s.push(30);
+
+    cout << "Top element: " << s.top() << endl; // Output: 30
+
+    s.pop();
+
+    cout << "After popping, top element: " << s.top() << endl; // Output: 20
+
+    while(!s.empty())
+    {
+        cout<<s.top()<<' ';
+        s.pop();
+    } 
+    return 0;
+}
+*/
+
+
+
 #include <iostream>
 using namespace std;
 
