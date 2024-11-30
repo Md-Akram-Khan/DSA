@@ -1,0 +1,85 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+struct Stack {
+    struct node {
+        int val;
+        node *next;
+    };
+
+    node *head, *tail;
+    Stack() {
+        head = nullptr;
+        tail = nullptr;
+    }
+
+    void push(int x) {
+        node *new_node = new node();
+        new_node->val = x;
+        new_node->next = head;
+        head = new_node;
+        if (tail == nullptr)
+            tail = new_node;
+    }
+
+    int pop() {
+        if (head == nullptr) {
+            throw runtime_error("Stack underflow");
+        }
+        int value = head->val;
+        node *temp = head;
+        head = head->next;
+        delete temp;
+        if (head == nullptr)
+            tail = nullptr;
+        return value;
+    }
+
+    bool empty() {
+        return head == nullptr;
+    }
+};
+
+int evaluate(int op1, int op2, char oper) {
+    switch (oper) {
+        case '+': return op1 + op2;
+        case '-': return op1 - op2;
+        case '*': return op1 * op2;
+        case '/': return op1 / op2;
+        case '^': return pow(op1, op2);
+        //default: throw invalid_argument("Invalid operator");
+    }
+}
+
+int infix_to_postfix_evaluation(const string &expression) {
+    Stack s;
+
+    for (char ch : expression) {
+        if (isdigit(ch)) {
+            s.push(ch - '0'); 
+        } else {
+            //if (s.empty()) throw runtime_error("Invalid expression");
+            int op2 = s.pop();
+
+            //if (s.empty()) throw runtime_error("Invalid expression");
+            int op1 = s.pop();
+
+            int result = evaluate(op1, op2, ch);
+            s.push(result); 
+        }
+    }
+
+    //if (s.empty()) throw runtime_error("Invalid expression");
+    int result = s.pop();
+
+    //if (!s.empty()) throw runtime_error("Invalid expression");
+    return result;
+}
+
+int main() {
+    string expression;
+    cout << "Enter postfix expression: ";
+    cin >> expression;
+    cout<<infix_to_postfix_evaluation(expression)<<endl;
+    return 0;
+}
