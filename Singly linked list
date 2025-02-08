@@ -19,7 +19,7 @@ struct singly_linked_list{
         node *new_node = new node();
         new_node->val = x;
         new_node->next = nullptr;
-        if(tail == nullptr)
+        if(head == nullptr)
         {
             head = new_node;
             tail = new_node;
