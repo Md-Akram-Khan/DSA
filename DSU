@@ -13,8 +13,8 @@ struct dsu
     }
     int findparent(int child)
     {
-        if(child != parent[child]) parent[child] = findparent(parent[child]);
-        return parent[child];
+        if(child == parent[child]) return child;
+        return parent[child] = findparent(parent[child]);
     }
     bool same_parent(int u, int v)
     {
