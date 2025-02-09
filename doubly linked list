@@ -117,6 +117,22 @@ struct doubly_linked_list{
         }
         cout<<"Value "<<x<<" not found in the list."<<endl;
     }
+    void deleteMiddleNode(node *nde) {
+        if (nde == nullptr) return;
+        if (nde == head) 
+        {
+            head = head->next;
+            if (head) head->prev = nullptr;
+        } 
+        else nde->prev->next = nde->next;
+        if (nde == tail) 
+        {
+            tail = tail->prev;
+            if (tail) tail->next = nullptr;
+        } 
+        else nde->next->prev = nde->prev;
+        delete nde;
+    }
     void print()
     {
         node *current = head;
