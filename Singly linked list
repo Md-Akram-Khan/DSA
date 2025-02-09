@@ -8,6 +8,7 @@ struct singly_linked_list{
     };
 
     node *head, *tail;
+    unordered_map<Node*, Node*> prevMap; //for converting singly to doubly
     singly_linked_list()
     {
         head = nullptr;
@@ -23,10 +24,12 @@ struct singly_linked_list{
         {
             head = new_node;
             tail = new_node;
+            //prevMap[newNode] = nullptr; 
         }
         else
         {
             tail->next = new_node;
+            //prevMap[newNode] = tail;
             tail = new_node;
         }
     }
@@ -191,6 +194,47 @@ struct singly_linked_list{
             }
         }
     }
+     bool isCircular() {
+        if (!head) return false;
+
+        Node* slow = head;
+        Node* fast = head;
+
+        while (fast && fast->next) {
+            slow = slow->next;       
+            fast = fast->next->next; 
+
+            if (slow == fast) {
+                return true;
+            }
+        }
+        return false;
+    }
+/*
+    void deleteMiddleNode(Node* nde) { 
+        if (nde == nullptr) return;
+
+        Node* prev = prevMap[nde];
+
+        if (nde == head) {
+            head = head->next;
+            if (head) prevMap[head] = nullptr;
+        } else {
+            prev->next = nde->next;
+        }
+
+        if (nde == tail) {
+            tail = prev;
+            if (tail) tail->next = nullptr;
+        } 
+        else
+            prevMap[nde->next] = prev;
+        }
+
+        prevMap.erase(nde); 
+        delete nde;
+    }
+*/
     void print()
     {
         node *current = head;
