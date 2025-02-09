@@ -194,6 +194,52 @@ struct singly_linked_list{
             }
         }
     }
+    // sorting Sort Starts here
+    Node* getMiddle(Node* head) {
+        Node* slow = head;
+        Node* fast = head->next;
+    
+        while (fast && fast->next) {
+            slow = slow->next;
+            fast = fast->next->next;
+        }
+        return slow;
+    }
+    
+    Node* sorting(Node* left, Node* right) {
+        if (!left) return right;
+        if (!right) return left;
+    
+        Node* result = nullptr;
+    
+        if (left->val <= right->val) {
+            result = left;
+            result->next = sorting(left->next, right);
+        } else {
+            result = right;
+            result->next = sorting(left, right->next);
+        }
+    
+        return result;
+    }
+    
+    Node* divide(Node* head) {
+        if (!head || !head->next) return head;
+    
+        Node* middle = getMiddle(head);
+        Node* rightHalf = middle->next;
+        middle->next = nullptr; // Split the list
+    
+        Node* leftSorted = divide(head);
+        Node* rightSorted = divide(rightHalf);
+    
+        return sorting(leftSorted, rightSorted);
+    }
+    
+    void mergeSort {
+        head = divide(head);
+    }
+    // sorting Sort Ends here
      bool isCircular() {
         if (!head) return false;
 
