@@ -84,3 +84,74 @@ int main()
     }
 }
 */
+/*
+import java.util.*;
+
+class dsu {
+    int[] parent;
+    int[] size;
+
+    dsu(int n) {
+        parent = new int[n];
+        size = new int[n];
+        for (int i = 0; i < n; i++) {
+            parent[i] = i;
+            size[i] = 1;
+        }
+    }
+
+    public int find_parent(int node) {
+        if (node == parent[node])
+            return node;
+        return parent[node] = find_parent(parent[node]);
+    }
+
+    public void union_by_size(int u, int v) {
+        int parent_u = find_parent(u);
+        int parent_v = find_parent(v);
+        if (parent_u == parent_v)
+            return;
+        if (size[parent_u] < size[parent_v]) {
+            parent[parent_u] = parent_v;
+            size[parent_v] += size[parent_u];
+            size[parent_u] = 0;
+        } else {
+            parent[parent_v] = parent_u;
+            size[parent_u] += size[parent_v];
+            size[parent_v] = 0;
+        }
+    }
+}
+
+public class Fun {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int node, edge;
+        node = sc.nextInt();
+        edge = sc.nextInt();
+        dsu graph = new dsu(node);
+        for (int i = 0; i < edge; i++) {
+            int u, v;
+            u = sc.nextInt();
+            v = sc.nextInt();
+            graph.union_by_size(u, v);
+        }
+        int cnt = 0;
+        for (int i = 0; i < node; i++) {
+            if (graph.parent[i] == i)
+                cnt++;
+        }
+        System.out.println(cnt);
+        sc.close();
+    }
+}
+//////////////////////////////////////////////////////////////////////
+input:
+6 4
+0 1
+1 2
+3 4
+4 5
+output:
+2
+*/
