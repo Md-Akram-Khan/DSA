@@ -1,0 +1,34 @@
+struct MinQueue {
+    stack<pair<long long, long long>> s1, s2;
+ 
+    // Push element x into the queue
+    void push(long long x) {
+        long long mn = s1.empty() ? x : min(x, s1.top().second);
+        s1.push({x, mn});
+    }
+ 
+    // Move all elements from s1 to s2 when s2 is empty
+    void shift() {
+        if (!s2.empty()) return;
+        while (!s1.empty()) {
+            long long val = s1.top().first;
+            s1.pop();
+            long long mn = s2.empty() ? val : min(val, s2.top().second);
+            s2.push({val, mn});
+        }
+    }
+ 
+    // Pop element from the queue
+    void pop() {
+        shift();
+        if (!s2.empty()) s2.pop();
+    }
+ 
+    // Get minimum in current queue
+    long long getMin() {
+        if (s1.empty() && s2.empty()) return LLONG_MAX;
+        if (s1.empty()) return s2.top().second;
+        if (s2.empty()) return s1.top().second;
+        return min(s1.top().second, s2.top().second);
+    }
+};
