@@ -1,0 +1,75 @@
+/************************************************************
+   COMPLETE PBDS ORDERED SET – All Operations Explained
+   Requires: GCC (MinGW/WinLibs) 9+ and <ext/pb_ds/>
+
+   Time Complexities:
+   ---------------------------------------------------------
+   insert(x)            -> O(log n)
+   erase(x)             -> O(log n)
+   order_of_key(x)      -> O(log n)
+   find_by_order(k)     -> O(log n)
+   lower_bound(x)       -> O(log n)
+   upper_bound(x)       -> O(log n)
+   join(), split()      -> O(log n) or O(n log(n/m))
+ ************************************************************/
+
+#include <bits/stdc++.h>
+#include <ext/pb_ds/assoc_container.hpp>
+#include <ext/pb_ds/tree_policy.hpp>
+using namespace std;
+using namespace __gnu_pbds;
+
+// DECLARING ORDERED SET
+typedef tree<
+    int,                             // stored data type. for multiset use pair<int, int>
+    null_type,                       // no mapped value (set)
+    less<int>,                       // sorted in ascending order.for multiset use less<pair<int,int>>
+    rb_tree_tag,                     // underlying RB tree
+    tree_order_statistics_node_update // updates metadata for order statistics, Enables two special operations:find_by_order(k) → returns the k-th element (0-indexed), order_of_key(x) → returns the count of elements strictly smaller than x.
+> ordered_set;
+
+int main() {
+    ordered_set s;
+
+    // INSERT — O(log n)
+    s.insert(10);
+    s.insert(5);
+    s.insert(20);
+    s.insert(15);
+
+    // PRINT CONTENTS
+    cout << "Ordered set contents: ";
+    for (int x : s) cout << x << " ";
+    cout << "\n";
+
+    // ERASE — O(log n)
+    s.erase(10);
+
+    // FIND_BY_ORDER — O(log n)
+    // returns iterator to k-th smallest element (0-indexed)
+    cout << "0th smallest: " << *s.find_by_order(0) << "\n";
+    cout << "1st smallest: " << *s.find_by_order(1) << "\n";
+
+    // ORDER_OF_KEY — O(log n)
+    // number of elements strictly smaller than x
+    cout << "Count < 15: " << s.order_of_key(15) << "\n";  // 1 (only 5)
+
+    // LOWER_BOUND — O(log n)
+    cout << "lower_bound(15): " << *s.lower_bound(15) << "\n";  //First element >= x
+
+    // UPPER_BOUND — O(log n)
+    cout << "upper_bound(15): " << *s.upper_bound(15) << "\n"; //First element > x
+
+    // SIZE — O(1)
+    cout << "Size: " << s.size() << "\n";
+
+    // CLEAR — O(n)
+    s.clear();
+    cout << "Set cleared, size = " << s.size() << "\n";
+
+    /* O(n log(n/m))
+    s.join(other_set);  //Join two trees (must be non-overlapping keys).
+    s.split(x, other_set); //O(log n) Split tree by key.
+    */
+    return 0;
+}
