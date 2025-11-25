@@ -1,0 +1,66 @@
+/************************************************************
+   COMPLETE PBDS ORDERED MAP – All Operations Explained
+
+   ordered_map works like map<int,int> but supports:
+       - order_of_key()
+       - find_by_order()
+
+   Time Complexities:
+   ---------------------------------------------------------
+   mp[key] = value         -> O(log n)
+   find_by_order(k)        -> O(log n)
+   order_of_key(x)         -> O(log n)
+   erase(key)              -> O(log n)
+ ************************************************************/
+
+#include <bits/stdc++.h>
+#include <ext/pb_ds/assoc_container.hpp>
+#include <ext/pb_ds/tree_policy.hpp>
+using namespace std;
+using namespace __gnu_pbds;
+
+// DECLARING ORDERED MAP
+typedef tree<
+    int,                              // key
+    int,                              // mapped value
+    less<int>,                        // ascending key order
+    rb_tree_tag,
+    tree_order_statistics_node_update
+> ordered_map;
+
+int main() {
+    ordered_map mp;
+
+    // INSERT / UPDATE — O(log n)
+    mp[5] = 100;
+    mp[2] = 30;
+    mp[10] = 500;
+
+    cout << "Map contents:\n";
+    for (auto &p : mp)
+        cout << p.first << " => " << p.second << "\n";
+
+    // ACCESS VALUE — O(log n)
+    cout << "Value at key 5: " << mp[5] << "\n";
+
+    // ERASE — O(log n)
+    mp.erase(2);
+
+    // FIND_BY_ORDER — O(log n)
+    // get k-th smallest key
+    auto it = mp.find_by_order(1);
+    cout << "Key at index 1: " << it->first << " => " << it->second << "\n";
+
+    // ORDER_OF_KEY — O(log n)
+    // how many keys < x
+    cout << "Keys smaller than 10: " << mp.order_of_key(10) << "\n";
+
+    // SIZE — O(1)
+    cout << "Map size: " << mp.size() << "\n";
+
+    // CLEAR — O(n)
+    mp.clear();
+    cout << "Map cleared, size = " << mp.size() << "\n";
+
+    return 0;
+}
