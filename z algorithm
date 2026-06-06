@@ -1,0 +1,59 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+vector<int> calculateZ(string s) {
+    int n = s.size();
+    vector<int> Z(n);
+
+    int left = 0, right = 0;
+
+    for (int k = 1; k < n; k++) {
+
+        if (k > right) {
+            left = right = k;
+
+            while (right < n &&
+                   s[right] == s[right - left])
+                right++;
+
+            Z[k] = right - left;
+            right--;
+        }
+        else {
+            int k1 = k - left;
+
+            if (Z[k1] < right - k + 1) {
+                Z[k] = Z[k1];
+            }
+            else {
+                left = k;
+
+                while (right + 1 < n &&
+                       s[right + 1] == s[right + 1 - left])
+                    right++;
+
+                Z[k] = right - left + 1;
+            }
+        }
+    }
+
+    return Z;
+}
+
+int main() {
+    string text, pattern;
+    cin >> text >> pattern;
+
+    string temp = pattern + "$" + text;
+
+    vector<int> Z = calculateZ(temp);
+
+    int m = pattern.size();
+
+    for (int i = m + 1; i < (int)temp.size(); i++) {
+        if (Z[i] == m)
+            cout << i - m - 1 << ' ';
+    }
+
+    cout << '\n';
+}
